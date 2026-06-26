@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trilha dos Descritores</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg: #FBF7EE;
+    --grid-line: rgba(27,42,74,0.07);
+    --ink: #1B2A4A;
+    --ink-soft: #51618A;
+    --accent: #E2572B;
+    --accent-soft: #FBE2D6;
+    --success: #2E9E76;
+    --success-soft: #DDF0E7;
+    --warn: #C9921C;
+    --card: #FFFFFF;
+    --shadow: rgba(27,42,74,0.16);
+    --line: #D8CFBC;
+    --radius: 18px;
+  }
+
+  body.contraste-alto{
+    --bg: #0B0B0B;
+    --grid-line: rgba(255,255,255,0.08);
+    --ink: #FFFFFF;
+    --ink-soft: #F4F4F4;
+    --accent: #FFD23F;
+    --accent-soft: #3A3000;
+    --success: #5CF2A7;
+    --success-soft: #08321E;
+    --warn: #FFD23F;
+    --card: #161616;
+    --shadow: rgba(0,0,0,0.6);
+    --line: #444444;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ font-size: 100%; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    transition: background-color .25s, color .25s;
+  }
+
+  .wrap{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  header{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 18px;
+    border-bottom: 2px dashed var(--line);
+    padding-bottom: 22px;
+    margin-bottom: 28px;
+  }
+
+  .titulo-bloco .eyebrow{
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-size: .72rem;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+
+  .subtitulo{
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+
+  .barra-acessibilidade{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .botao-acesso{
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 9px 14px;
+    font-size: .85rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform .15s, box-shadow .15s;
+  }
+
+  .botao-acesso:hover{ transform: translateY(-1px); box-shadow: 0 4px 10px var(--shadow); }
+  .botao-acesso:focus-visible{ outline: 3px solid var(--accent); outline-offset: 2px; }
+  .botao-acesso[aria-pressed="true"]{ background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .painel-progresso{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 34px;
+    flex-wrap: wrap;
+  }
+
+  .barra-fundo{
+    flex: 1;
+    min-width: 220px;
+    height: 12px;
+    background: var(--accent-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .barra-preenchimento{
+    height: 100%;
+    background: var(--success);
+    width: 0%;
+    transition: width .4s ease;
+  }
+
+  .texto-progresso{ font-weight: 600; font-size: .92rem; white-space: nowrap; }
+
+  .botao-reiniciar{
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: .85rem;
+  }
+
+  /* TRILHA - DESKTOP */
+  .trilha{
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .trilha svg{ width: 100%; display: block; }
+
+  .trilha-estacoes{
+    position: absolute;
+    inset: 0;
+  }
+
+  .estacao{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 3px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Baloo 2', sans-serif;
+    color: var(--ink);
+    box-shadow: 0 6px 14px var(--shadow);
+    transition: transform .18s, border-color .18s;
+  }
+
+  .estacao:hover{ transform: translate(-50%, -50%) scale(1.06); }
+  .estacao:focus-visible{ outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  .estacao .emoji{ font-size: 1.5rem; line-height: 1; }
+  .estacao .codigo{ font-size: .68rem; font-weight: 700; color: var(--ink-soft); margin-top: 2px; }
+
+  .estacao.concluida{ border-color: var(--success); background: var(--success-soft); }
+  .estacao.concluida::after{
+    content: "✓";
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--success);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+    border: 2px solid var(--card);
+  }
+
+  .pos-1{ left: 10%; top: 80%; }
+  .pos-2{ left: 30%; top: 25%; }
+  .pos-3{ left: 50%; top: 75%; }
+  .pos-4{ left: 70%; top: 25%; }
+  .pos-5{ left: 90%; top: 75%; }
+
+  /* TRILHA - MOBILE */
+  @media (max-width: 640px){
+    .trilha svg{ display: none; }
+    .trilha{ height: auto; }
+    .trilha-estacoes{
+      position: static;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 3px dashed var(--line);
+      padding-left: 18px;
+      margin-left: 30px;
+    }
+    .estacao{
+      position: static;
+      transform: none;
+      width: 100%;
+      height: auto;
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-left: -48px;
+    }
+    .estacao:hover{ transform: none; }
+    .estacao.concluida::after{ top: 6px; left: 6px; right: auto; }
+    .estacao .info-mobile{ text-align: left; }
+  }
+
+  .legenda-estacoes{
+    margin-top: 18px;
+    font-size: .85rem;
+    color: var(--ink-soft);
+  }
+
+  /* MODAL */
+  .sobreposicao{
+    position: fixed;
+    inset: 0;
+    background: rgba(15,20,35,.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    z-index: 50;
+  }
+  .sobreposicao.aberta{ display: flex; }
+
+  .modal{
+    background: var(--card);
+    border-radius: var(--radius);
+    max-width: 620px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 26px 26px 28px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3);
+  }
+
+  .modal-topo{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .modal-topo h2{
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .fechar-modal{
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: var(--ink-soft);
+    line-height: 1;
+    padding: 4px;
+  }
+  .fechar-modal:focus-visible{ outline: 3px solid var(--accent); }
+
+  .etiqueta-descritor{
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: .75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .abas-nivel{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .aba{
+    border: 1.5px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .aba[aria-selected="true"]{ background: var(--ink); color: #fff; border-color: var(--ink); }
+  body.contraste-alto .aba[aria-selected="true"]{ background: var(--accent); color: #111; }
+
+  .pergunta-texto{
+    font-size: 1.05rem;
+    margin: 0 0 16px;
+  }
+
+  .grafico-mini{ margin-bottom: 16px; }
+
+  .tabela-mini{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: .92rem;
+  }
+  .tabela-mini th, .tabela-mini td{
+    border: 1.5px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+  }
+  .tabela-mini thead th{
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  .opcoes{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .opcao{
+    text-align: left;
+    border: 1.5px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: .96rem;
+  }
+  .opcao:hover{ border-color: var(--accent); }
+  .opcao:focus-visible{ outline: 3px solid var(--accent); }
+  .opcao.certa{ background: var(--success-soft); border-color: var(--success); }
+  .opcao.errada{ background: var(--accent-soft); border-color: var(--accent); }
+  .opcao[disabled]{ cursor: default; }
+
+  .retorno{
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: .92rem;
+    margin-bottom: 6px;
+  }
+  .retorno.certo{ background: var(--success-soft); color: var(--ink); }
+  .retorno.errado{ background: var(--accent-soft); color: var(--ink); }
+
+  .acoes-modal{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  footer{
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 2px dashed var(--line);
+    color: var(--ink-soft);
+    font-size: .85rem;
+  }
+
+  .sr-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+  }
+</style>
+</head>
+<body><div id="introTela" style="position:fixed;inset:0;background:#1B2A4A;color:white;display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="text-align:center;max-width:700px;padding:30px;">
+<h1>Trilha dos Descritores</h1>
+<p><strong>Autor:</strong> Luis Marcelo Santos Rocha</p>
+<p>IFCE Campus Paracuru – PROFEI</p>
+<p>Disciplina: Inteligência Artificial Generativa, Acessibilidade e Educação Inclusiva</p>
+<button onclick="document.getElementById('introTela').style.display='none'" style="padding:12px 28px;font-size:18px;border:none;border-radius:8px;background:#E2572B;color:white;cursor:pointer;">Iniciar Trilha</button>
+</div></div>
+<div class="wrap">
+<header>
+<div class="titulo-bloco">
+<p class="eyebrow">Recurso educacional inclusivo</p>
+<h1>Trilha dos Descritores</h1>
+<p class="subtitulo">Uma jornada matemática do 9º ano, com apoio da IAGen e três caminhos de leitura para cada estação.</p>
+</div>
+<div aria-label="Opções de acessibilidade" class="barra-acessibilidade" role="group">
+<button aria-label="Diminuir tamanho do texto" class="botao-acesso" id="btnDiminuir">A−</button>
+<button aria-label="Aumentar tamanho do texto" class="botao-acesso" id="btnAumentar">A+</button>
+<button aria-pressed="false" class="botao-acesso" id="btnContraste">Alto contraste</button>
+</div>
+</header>
+<div class="painel-progresso">
+<div aria-valuemax="10" aria-valuemin="0" aria-valuenow="0" class="barra-fundo" id="barraProgresso" role="progressbar">
+<div class="barra-preenchimento" id="preenchimento"></div>
+</div>
+<span class="texto-progresso" id="textoProgresso">0 de 10 questões concluídas</span>
+<button class="botao-reiniciar" id="btnReiniciar">Reiniciar trilha</button>
+</div>
+<div class="trilha">
+<svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 1000 400">
+<path d="M100,320 C200,320 200,100 300,100 C400,100 400,300 500,300 C600,300 600,100 700,100 C800,100 800,300 900,300" fill="none" stroke="var(--line)" stroke-dasharray="2 14" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<div class="trilha-estacoes" id="trilhaEstacoes"></div>
+</div>
+<p class="legenda-estacoes">Toque em cada estação para abrir a questão. Escolha entre a versão padrão, a simplificada ou a de aprofundamento.</p>
+<footer>
+<p>Recurso planejado e revisado pelo professor, com colaboração das ferramentas ChatGPT, Gemini e Claude nas etapas de criação dos itens, adaptação acessível e revisão pedagógica. Indicado para turmas de 9º ano do Ensino Fundamental, na preparação para o SPAECE e o SAEB.</p>
+</footer>
+</div>
+<div class="sobreposicao" id="sobreposicao">
+<div aria-labelledby="modalTitulo" aria-modal="true" class="modal" role="dialog">
+<div class="modal-topo">
+<div>
+<span class="etiqueta-descritor" id="modalDescritor"></span>
+<h2 id="modalTitulo"></h2>
+</div>
+<button aria-label="Fechar questão" class="fechar-modal" id="btnFechar">×</button>
+</div>
+<div aria-label="Questão da estação" class="abas-nivel" id="abasQuestao" role="tablist"></div>
+<div aria-label="Nível da questão" class="abas-nivel" id="abasNivel" role="tablist"></div>
+<div id="conteudoGrafico"></div>
+<p class="pergunta-texto" id="perguntaTexto"></p>
+<div class="opcoes" id="opcoesContainer"></div>
+<div id="retornoContainer"></div>
+<div class="acoes-modal">
+<button class="botao-acesso" id="btnOuvir">🔊 Ouvir a pergunta</button>
+<span aria-live="polite" class="sr-only" id="statusLeitura"></span>
+</div>
+</div>
+</div>
+<script>
+(function(){
+
+  var graficoVendas = '<svg class="grafico-mini" viewBox="0 0 240 110" width="100%" height="110" role="img" aria-label="Gráfico de barras mostrando visitantes da feira cultural. Sexta-feira, 80 visitantes. Sábado, 150 visitantes. Domingo, 120 visitantes.">' +
+    '<rect x="20" y="50" width="40" height="50" fill="var(--ink-soft)"></rect>' +
+    '<rect x="100" y="0" width="40" height="100" fill="var(--accent)"></rect>' +
+    '<rect x="180" y="20" width="40" height="80" fill="var(--success)"></rect>' +
+    '<text x="40" y="108" font-size="11" text-anchor="middle" fill="var(--ink)">Sex</text>' +
+    '<text x="120" y="108" font-size="11" text-anchor="middle" fill="var(--ink)">Sáb</text>' +
+    '<text x="200" y="108" font-size="11" text-anchor="middle" fill="var(--ink)">Dom</text>' +
+    '</svg>';
+
+  var tabelaInscritos = '<table class="tabela-mini" aria-label="Tabela de inscritos nas atividades culturais da feira">' +
+    '<thead><tr><th>Atividade</th><th>Inscritos</th></tr></thead>' +
+    '<tbody>' +
+    '<tr><td>Dança</td><td>45</td></tr>' +
+    '<tr><td>Teatro</td><td>30</td></tr>' +
+    '<tr><td>Música</td><td>25</td></tr>' +
+    '<tr><td><strong>Total</strong></td><td><strong>100</strong></td></tr>' +
+    '</tbody></table>';
+
+  var estacoes = [
+    {
+      id: 1, codigo: "D28", titulo: "Banca de ingressos", emoji: "🎫", pos: "pos-1",
+      questoes: [
+        {
+          niveis: {
+            padrao: {
+              pergunta: "Na barraca de entrada da feira cultural foram vendidos 320 ingressos no sábado. Sabendo que 15% desses ingressos foram cortesias para professores e funcionários, quantos ingressos foram efetivamente pagos pelo público?",
+              opcoes: ["272 ingressos", "288 ingressos", "48 ingressos", "304 ingressos"],
+              certa: 0,
+              certo: "Isso mesmo. 15% de 320 são 48 cortesias, e 320 menos 48 dá 272 ingressos pagos.",
+              errado: "Calcule primeiro 15% de 320, que dá o número de cortesias, e depois subtraia esse valor de 320."
+            },
+            simples: {
+              pergunta: "Na feira cultural foram vendidos 320 ingressos. De cada 100 ingressos, 15 foram dados de cortesia para professores. Quantos ingressos, no total, foram pagos pelo público?",
+              opcoes: ["272 ingressos", "288 ingressos", "48 ingressos", "304 ingressos"],
+              certa: 0,
+              certo: "Isso mesmo. Se 15 de cada 100 são cortesia, em 320 ingressos temos 48 cortesias e 272 pagos.",
+              errado: "Pense em quantos ingressos de cortesia existem em 320, usando a proporção de 15 para 100."
+            },
+            aprofundamento: {
+              pergunta: "No sábado da feira foram vendidos 320 ingressos, com 15% de cortesias. No domingo as vendas cresceram 25% em relação ao sábado, mantendo a mesma proporção de cortesias. Quantos ingressos pagos foram vendidos somando os dois dias?",
+              opcoes: ["612 ingressos", "600 ingressos", "588 ingressos", "640 ingressos"],
+              certa: 0,
+              certo: "Isso mesmo. No sábado foram 272 ingressos pagos. No domingo, 320 mais 25% dá 400 ingressos vendidos, e 85% deles pagos são 340. Juntando os dois dias, 272 mais 340 resulta em 612.",
+              errado: "Calcule separadamente os ingressos pagos de cada dia e depois some os dois resultados."
+            }
+          }
+        },
+        {
+          niveis: {
+            padrao: {
+              pergunta: "A camiseta oficial da feira cultural custa normalmente 40 reais. No último dia, foi oferecido um desconto de 20% para quem comprasse mais de uma unidade. Qual o valor pago por uma camiseta com esse desconto?",
+              opcoes: ["32 reais", "36 reais", "8 reais", "28 reais"],
+              certa: 0,
+              certo: "Isso mesmo. 20% de 40 reais são 8 reais de desconto, e 40 menos 8 dá 32 reais.",
+              errado: "Calcule 20% de 40 reais para achar o desconto, e depois subtraia esse valor do preço original."
+            },
+            simples: {
+              pergunta: "A camiseta da feira custa 40 reais. No último dia houve um desconto de 20%. Quanto custa a camiseta com o desconto?",
+              opcoes: ["32 reais", "36 reais", "8 reais", "28 reais"],
+              certa: 0,
+              certo: "Isso mesmo. O desconto é de 8 reais, então o valor final é 32 reais.",
+              errado: "Descubra quanto vale o desconto de 20% sobre 40 reais, e depois subtraia esse valor do preço cheio."
+            },
+            aprofundamento: {
+              pergunta: "A camiseta da feira custa 40 reais. No último dia houve desconto de 20% para quem comprasse mais de uma unidade, e um desconto adicional de 5% sobre o valor já com desconto para quem pagasse em dinheiro. Qual o valor final de uma camiseta comprada em dinheiro, com os dois descontos aplicados?",
+              opcoes: ["30 reais e 40 centavos", "30 reais", "28 reais e 40 centavos", "32 reais"],
+              certa: 0,
+              certo: "Isso mesmo. Com 20% de desconto o valor cai para 32 reais, e aplicando mais 5% sobre os 32 reais, o valor final fica em 30 reais e 40 centavos.",
+              errado: "Aplique os dois descontos em sequência, primeiro os 20% sobre o preço cheio, e depois os 5% sobre o valor já reduzido."
+            }
+          }
+        }
+      ]
+    },
+    {
+      id: 2, codigo: "D25", titulo: "Caixa da barraca de doces", emoji: "🧮", pos: "pos-2",
+      questoes: [
+        {
+          niveis: {
+            padrao: {
+              pergunta: "No final da feira cultural, a barraca de doces registrou um lucro de 50 reais na sexta-feira, 80 reais no sábado, e um prejuízo de 10 reais no domingo, por causa da chuva. Qual foi o resultado financeiro total da barraca ao longo dos três dias?",
+              opcoes: ["120 reais", "140 reais", "100 reais", "130 reais"],
+              certa: 0,
+              certo: "Isso mesmo. Somando os lucros e subtraindo o prejuízo, 50 mais 80 menos 10 dá 120 reais.",
+              errado: "Some os dois lucros e depois subtraia o prejuízo do domingo do resultado."
+            },
+            simples: {
+              pergunta: "A barraca de doces lucrou 50 reais na sexta-feira e 80 reais no sábado. No domingo ela teve um prejuízo de 10 reais por causa da chuva. Qual foi o resultado total dos três dias, juntando lucros e prejuízo?",
+              opcoes: ["120 reais", "140 reais", "100 reais", "130 reais"],
+              certa: 0,
+              certo: "Isso mesmo. 50 mais 80 dá 130, e tirando os 10 reais de prejuízo chegamos a 120 reais.",
+              errado: "Lembre que o prejuízo deve ser subtraído, e não somado, ao resultado dos dois primeiros dias."
+            },
+            aprofundamento: {
+              pergunta: "A barraca de doces lucrou 50 reais na sexta-feira e 80 reais no sábado, mas teve um prejuízo de 10 reais no domingo. Metade do lucro total dos três dias será dividida igualmente entre os 4 alunos responsáveis pela barraca. Quanto cada um vai receber?",
+              opcoes: ["15 reais", "30 reais", "20 reais", "12 reais"],
+              certa: 0,
+              certo: "Isso mesmo. O resultado total é 120 reais, a metade é 60 reais, e dividindo por 4 alunos cada um recebe 15 reais.",
+              errado: "Primeiro encontre o resultado total dos três dias, depois calcule a metade desse valor, e só então divida por 4."
+            }
+          }
+        },
+        {
+          niveis: {
+            padrao: {
+              pergunta: "A cantina preparou 7,5 litros de suco para vender na feira. Cada copo cheio usa 0,25 litro de suco. Quantos copos cheios podem ser servidos com essa quantidade?",
+              opcoes: ["30 copos", "25 copos", "18 copos", "35 copos"],
+              certa: 0,
+              certo: "Isso mesmo. Dividindo 7,5 por 0,25, chegamos a 30 copos cheios.",
+              errado: "Divida o total de litros de suco pela quantidade usada em cada copo."
+            },
+            simples: {
+              pergunta: "A cantina tem 7,5 litros de suco. Cada copo usa 0,25 litro. Quantos copos cheios dá para servir?",
+              opcoes: ["30 copos", "25 copos", "18 copos", "35 copos"],
+              certa: 0,
+              certo: "Isso mesmo. 7,5 dividido por 0,25 dá 30 copos.",
+              errado: "Pense em quantas vezes 0,25 litro cabe dentro de 7,5 litros."
+            },
+            aprofundamento: {
+              pergunta: "A cantina preparou 7,5 litros de suco. Cada copo cheio usa 0,25 litro, mas ao final do dia restaram 0,5 litro de suco não vendido. Quantos copos cheios foram efetivamente servidos durante a feira?",
+              opcoes: ["28 copos", "26 copos", "30 copos", "24 copos"],
+              certa: 0,
+              certo: "Isso mesmo. O suco servido foi 7,5 menos 0,5, ou seja, 7 litros, e 7 dividido por 0,25 dá 28 copos.",
+              errado: "Primeiro descubra quantos litros foram realmente servidos, subtraindo o que sobrou do total preparado, e só depois divida por 0,25."
+            }
+          }
+        }
+      ]
+    },
+    {
+      id: 3, codigo: "D13", titulo: "Barraca de artesanato", emoji: "🎨", pos: "pos-3",
+      questoes: [
+        {
+          niveis: {
+            padrao: {
+              pergunta: "A barraca de artesanato da feira tem formato retangular, com 4 metros de comprimento e 3 metros de largura. Qual é a área ocupada pela barraca?",
+              opcoes: ["12 metros quadrados", "7 metros quadrados", "14 metros quadrados", "24 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. A área de um retângulo é comprimento vezes largura, então 4 vezes 3 dá 12 metros quadrados.",
+              errado: "Para encontrar a área de um retângulo, multiplique o comprimento pela largura."
+            },
+            simples: {
+              pergunta: "A barraca de artesanato mede 4 metros de comprimento e 3 metros de largura. Quantos metros quadrados ela ocupa?",
+              opcoes: ["12 metros quadrados", "7 metros quadrados", "14 metros quadrados", "24 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. Basta multiplicar 4 por 3, e o resultado é 12 metros quadrados.",
+              errado: "Multiplique os dois lados da barraca, o comprimento e a largura, para achar a área."
+            },
+            aprofundamento: {
+              pergunta: "A barraca de artesanato é formada por um retângulo de 4 por 3 metros, com um toldo triangular na entrada, de base 4 metros e altura 1,5 metro. Qual é a área total ocupada pela barraca, somando o retângulo e o triângulo?",
+              opcoes: ["15 metros quadrados", "13,5 metros quadrados", "18 metros quadrados", "16,5 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. A área do retângulo é 12 metros quadrados, a do triângulo é 4 vezes 1,5 dividido por 2, que dá 3, e a soma é 15 metros quadrados.",
+              errado: "Calcule a área do retângulo e a área do triângulo separadamente, lembrando que a área do triângulo é base vezes altura dividido por 2."
+            }
+          }
+        },
+        {
+          niveis: {
+            padrao: {
+              pergunta: "Para a apresentação de dança da feira, foi usado um tapete circular de 2 metros de raio no centro do palco. Usando 3,14 para o número pi, qual é a área aproximada ocupada pelo tapete?",
+              opcoes: ["12,56 metros quadrados", "6,28 metros quadrados", "25,12 metros quadrados", "4 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. A área do círculo é pi vezes o raio ao quadrado, e 3,14 vezes 4 dá 12,56 metros quadrados.",
+              errado: "Lembre que a área do círculo é pi multiplicado pelo raio ao quadrado, e o raio aqui vale 2 metros."
+            },
+            simples: {
+              pergunta: "O tapete usado na apresentação de dança é um círculo de 2 metros de raio. Usando 3,14 para o número pi, qual é a área aproximada do tapete?",
+              opcoes: ["12,56 metros quadrados", "6,28 metros quadrados", "25,12 metros quadrados", "4 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. Multiplicando 3,14 por 2 e depois por 2 de novo, chegamos a 12,56 metros quadrados.",
+              errado: "Multiplique 3,14 pelo raio, e depois multiplique o resultado novamente pelo raio."
+            },
+            aprofundamento: {
+              pergunta: "O palco da feira é retangular, com 10 metros de comprimento e 6 metros de largura. No centro do palco foi colocado um tapete circular de 2 metros de raio para a apresentação de dança. Usando 3,14 para o número pi, qual é a área do palco que fica livre, fora do tapete?",
+              opcoes: ["47,44 metros quadrados", "48 metros quadrados", "45,44 metros quadrados", "50,56 metros quadrados"],
+              certa: 0,
+              certo: "Isso mesmo. A área do palco é 60 metros quadrados, a do tapete é 12,56 metros quadrados, e a diferença entre as duas é 47,44 metros quadrados.",
+              errado: "Calcule primeiro a área total do palco, depois a área do tapete circular, e por fim subtraia uma da outra."
+            }
+          }
+        }
+      ]
+    },
+    {
+      id: 4, codigo: "D29", titulo: "Receita da cantina", emoji: "🍫", pos: "pos-4",
+      questoes: [
+        {
+          niveis: {
+            padrao: {
+              pergunta: "A receita de brigadeiro usada na cantina da feira rende 20 docinhos com 200 gramas de chocolate. Mantendo a mesma proporção, quantos gramas de chocolate são necessários para fazer 50 docinhos?",
+              opcoes: ["500 gramas", "450 gramas", "400 gramas", "550 gramas"],
+              certa: 0,
+              certo: "Isso mesmo. Cada docinho usa 10 gramas de chocolate, então 50 docinhos precisam de 500 gramas.",
+              errado: "Descubra primeiro quantas gramas de chocolate vão em cada docinho, dividindo 200 por 20."
+            },
+            simples: {
+              pergunta: "Com 200 gramas de chocolate fazem-se 20 docinhos. Quantas gramas são necessárias para fazer 50 docinhos, na mesma proporção?",
+              opcoes: ["500 gramas", "450 gramas", "400 gramas", "550 gramas"],
+              certa: 0,
+              certo: "Isso mesmo. São 10 gramas por docinho, e 50 vezes 10 dá 500 gramas.",
+              errado: "Pense em quantas gramas são usadas para fazer um único docinho, e depois multiplique por 50."
+            },
+            aprofundamento: {
+              pergunta: "A receita original rende 20 docinhos com 200 gramas de chocolate. A cantina quer preparar docinhos para 130 alunos, prevendo 1,5 docinho por aluno em média. Mantendo a proporção da receita original, quantas gramas de chocolate serão necessárias?",
+              opcoes: ["1950 gramas", "1900 gramas", "1800 gramas", "2000 gramas"],
+              certa: 0,
+              certo: "Isso mesmo. São 195 docinhos no total, e como cada um usa 10 gramas de chocolate, o resultado é 1950 gramas.",
+              errado: "Primeiro descubra o número total de docinhos, multiplicando 130 alunos por 1,5, e depois converta esse número em gramas de chocolate."
+            }
+          }
+        },
+        {
+          niveis: {
+            padrao: {
+              pergunta: "Uma equipe de 4 alunos monta 1 barraca da feira em 2 horas, trabalhando no mesmo ritmo. Se a equipe fosse formada por 8 alunos, mantendo o mesmo ritmo por aluno, quanto tempo levariam para montar a mesma barraca?",
+              opcoes: ["1 hora", "4 horas", "30 minutos", "2 horas"],
+              certa: 0,
+              certo: "Isso mesmo. Com o dobro de alunos trabalhando no mesmo ritmo, o tempo cai pela metade, de 2 horas para 1 hora.",
+              errado: "Pense que, com mais alunos trabalhando juntos no mesmo ritmo, o tempo de montagem diminui, e não aumenta."
+            },
+            simples: {
+              pergunta: "4 alunos montam uma barraca em 2 horas. Se forem 8 alunos, no mesmo ritmo, quanto tempo vão levar para montar a mesma barraca?",
+              opcoes: ["1 hora", "4 horas", "30 minutos", "2 horas"],
+              certa: 0,
+              certo: "Isso mesmo. Dobrando o número de alunos, o tempo necessário cai para a metade, ou seja, 1 hora.",
+              errado: "Lembre que, quanto mais alunos ajudando, menos tempo é necessário para terminar o trabalho."
+            },
+            aprofundamento: {
+              pergunta: "Uma equipe de 4 alunos monta 1 barraca em 2 horas. Para a feira é preciso montar 3 barracas iguais, e a escola tem 6 alunos disponíveis, todos no mesmo ritmo, trabalhando juntos em uma barraca por vez. Quantas horas, no total, esses 6 alunos vão precisar para montar as 3 barracas?",
+              opcoes: ["4 horas", "2 horas", "6 horas", "8 horas"],
+              certa: 0,
+              certo: "Isso mesmo. Cada barraca exige 8 horas de trabalho de uma pessoa somando todo o esforço, as 3 barracas exigem 24 horas de trabalho de uma pessoa, e dividindo entre os 6 alunos, o tempo total é 4 horas.",
+              errado: "Calcule quanto esforço, em horas de uma pessoa, cada barraca exige, multiplique pelas 3 barracas, e depois divida pelos 6 alunos disponíveis."
+            }
+          }
+        }
+      ]
+    },
+    {
+      id: 5, codigo: "D36", titulo: "Resultado das vendas", emoji: "📊", pos: "pos-5",
+      questoes: [
+        {
+          grafico: "barras",
+          niveis: {
+            padrao: {
+              pergunta: "De acordo com o gráfico de vendas da feira cultural, qual foi o dia de maior número de visitantes?",
+              opcoes: ["Sábado", "Domingo", "Sexta-feira", "Todos os dias tiveram o mesmo número de visitantes"],
+              certa: 0,
+              certo: "Isso mesmo. A barra do sábado é a mais alta no gráfico, representando 150 visitantes.",
+              errado: "Observe qual barra do gráfico chega mais alto, comparando os três dias."
+            },
+            simples: {
+              pergunta: "Olhando o gráfico, qual dia teve mais visitantes na feira?",
+              opcoes: ["Sábado", "Domingo", "Sexta-feira", "Todos os dias tiveram o mesmo número de visitantes"],
+              certa: 0,
+              certo: "Isso mesmo. O sábado teve a barra mais alta, com 150 visitantes.",
+              errado: "Veja qual coluna do gráfico é a mais alta."
+            },
+            aprofundamento: {
+              pergunta: "Observando o gráfico de vendas da feira ao longo dos três dias, qual foi o aumento percentual de visitantes do dia de menor movimento, a sexta-feira, para o dia de maior movimento, o sábado?",
+              opcoes: ["87,5%", "70%", "150%", "50%"],
+              certa: 0,
+              certo: "Isso mesmo. A sexta teve 80 visitantes e o sábado teve 150. O aumento de 70 visitantes sobre 80 corresponde a 87,5%.",
+              errado: "Calcule a diferença entre os dois valores e divida pelo valor inicial, o de sexta-feira, para achar o aumento percentual."
+            }
+          }
+        },
+        {
+          grafico: "tabela",
+          niveis: {
+            padrao: {
+              pergunta: "A tabela mostra o número de alunos inscritos em cada atividade cultural da feira. Quantos alunos, no total, se inscreveram nas atividades de dança e teatro juntas?",
+              opcoes: ["75 alunos", "70 alunos", "55 alunos", "100 alunos"],
+              certa: 0,
+              certo: "Isso mesmo. Somando os 45 inscritos em dança com os 30 inscritos em teatro, chegamos a 75 alunos.",
+              errado: "Some o número de inscritos em dança com o número de inscritos em teatro, lendo os valores na tabela."
+            },
+            simples: {
+              pergunta: "Observando a tabela de inscritos, quantos alunos se inscreveram em dança e em teatro, somando os dois?",
+              opcoes: ["75 alunos", "70 alunos", "55 alunos", "100 alunos"],
+              certa: 0,
+              certo: "Isso mesmo. Dança tem 45 inscritos e teatro tem 30, e a soma dos dois é 75.",
+              errado: "Procure na tabela o número de inscritos em dança e em teatro, e depois some os dois valores."
+            },
+            aprofundamento: {
+              pergunta: "De acordo com a tabela de inscritos, qual é o percentual de alunos inscritos em música em relação ao total de 100 alunos inscritos na feira?",
+              opcoes: ["25%", "30%", "45%", "20%"],
+              certa: 0,
+              certo: "Isso mesmo. Música tem 25 inscritos em um total de 100, o que corresponde a 25%.",
+              errado: "Divida o número de inscritos em música pelo total de inscritos na feira, e converta o resultado em percentual."
+            }
+          }
+        }
+      ]
+    }
+  ];
+
+  var concluidas = {};
+  var estacaoAtual = null;
+  var questaoAtual = 0;
+  var nivelAtual = "padrao";
+
+  var trilhaEstacoes = document.getElementById("trilhaEstacoes");
+
+  function chaveProgresso(estacaoId, questaoIndice){
+    return estacaoId + "-" + questaoIndice;
+  }
+
+  function estacaoCompleta(estacao){
+    return estacao.questoes.every(function(q, indice){
+      return concluidas[chaveProgresso(estacao.id, indice)];
+    });
+  }
+
+  function renderTrilha(){
+    trilhaEstacoes.innerHTML = "";
+    estacoes.forEach(function(estacao){
+      var completa = estacaoCompleta(estacao);
+      var botao = document.createElement("button");
+      botao.className = "estacao " + estacao.pos + (completa ? " concluida" : "");
+      botao.setAttribute("aria-label", "Estação " + estacao.id + ", " + estacao.titulo + ", descritor " + estacao.codigo + (completa ? ", concluída" : ""));
+      botao.innerHTML =
+        '<span class="emoji" aria-hidden="true">' + estacao.emoji + '</span>' +
+        '<span class="codigo">' + estacao.codigo + '</span>' +
+        '<span class="info-mobile sr-only">' + estacao.titulo + '</span>';
+      botao.addEventListener("click", function(){ abrirEstacao(estacao.id); });
+      trilhaEstacoes.appendChild(botao);
+    });
+    atualizarProgresso();
+  }
+
+  function atualizarProgresso(){
+    var total = 0;
+    estacoes.forEach(function(estacao){ total += estacao.questoes.length; });
+    var feitas = Object.keys(concluidas).length;
+    document.getElementById("preenchimento").style.width = (feitas / total * 100) + "%";
+    document.getElementById("textoProgresso").textContent = feitas + " de " + total + " questões concluídas";
+    document.getElementById("barraProgresso").setAttribute("aria-valuemax", total);
+    document.getElementById("barraProgresso").setAttribute("aria-valuenow", feitas);
+  }
+
+  var sobreposicao = document.getElementById("sobreposicao");
+
+  function abrirEstacao(id){
+    estacaoAtual = estacoes.filter(function(e){ return e.id === id; })[0];
+    questaoAtual = 0;
+    nivelAtual = "padrao";
+    document.getElementById("modalDescritor").textContent = "Descritor " + estacaoAtual.codigo;
+    document.getElementById("modalTitulo").textContent = estacaoAtual.titulo;
+
+    renderAbasQuestao();
+    renderAbasNivel();
+    renderPergunta();
+
+    sobreposicao.classList.add("aberta");
+    document.getElementById("btnFechar").focus();
+  }
+
+  function renderAbasQuestao(){
+    var abasQ = document.getElementById("abasQuestao");
+    abasQ.innerHTML = "";
+    estacaoAtual.questoes.forEach(function(questao, indice){
+      var aba = document.createElement("button");
+      aba.className = "aba";
+      aba.setAttribute("role", "tab");
+      aba.setAttribute("aria-selected", indice === questaoAtual ? "true" : "false");
+      aba.textContent = "Questão " + (indice + 1);
+      aba.addEventListener("click", function(){
+        questaoAtual = indice;
+        nivelAtual = "padrao";
+        renderAbasNivel();
+        renderPergunta();
+        Array.prototype.forEach.call(abasQ.children, function(el){
+          el.setAttribute("aria-selected", el === aba ? "true" : "false");
+        });
+      });
+      abasQ.appendChild(aba);
+    });
+  }
+
+  function renderAbasNivel(){
+    var abas = document.getElementById("abasNivel");
+    abas.innerHTML = "";
+    var rotulos = { padrao: "Padrão", simples: "Simplificada", aprofundamento: "Aprofundamento" };
+    Object.keys(rotulos).forEach(function(chave){
+      var aba = document.createElement("button");
+      aba.className = "aba";
+      aba.setAttribute("role", "tab");
+      aba.setAttribute("aria-selected", chave === nivelAtual ? "true" : "false");
+      aba.textContent = rotulos[chave];
+      aba.addEventListener("click", function(){
+        nivelAtual = chave;
+        renderPergunta();
+        Array.prototype.forEach.call(abas.children, function(el){
+          el.setAttribute("aria-selected", el === aba ? "true" : "false");
+        });
+      });
+      abas.appendChild(aba);
+    });
+  }
+
+  function renderPergunta(){
+    var questao = estacaoAtual.questoes[questaoAtual];
+    var dados = questao.niveis[nivelAtual];
+
+    var conteudoGrafico = document.getElementById("conteudoGrafico");
+    if(questao.grafico === "barras"){ conteudoGrafico.innerHTML = graficoVendas; }
+    else if(questao.grafico === "tabela"){ conteudoGrafico.innerHTML = tabelaInscritos; }
+    else { conteudoGrafico.innerHTML = ""; }
+
+    document.getElementById("perguntaTexto").textContent = dados.pergunta;
+    var opcoesContainer = document.getElementById("opcoesContainer");
+    opcoesContainer.innerHTML = "";
+    document.getElementById("retornoContainer").innerHTML = "";
+
+    var jaConcluida = concluidas[chaveProgresso(estacaoAtual.id, questaoAtual)];
+
+    dados.opcoes.forEach(function(texto, indice){
+      var botao = document.createElement("button");
+      botao.className = "opcao";
+      botao.textContent = texto;
+      botao.addEventListener("click", function(){ responder(indice, botao); });
+      opcoesContainer.appendChild(botao);
+    });
+  }
+
+  function responder(indiceEscolhido, botaoClicado){
+    var questao = estacaoAtual.questoes[questaoAtual];
+    var dados = questao.niveis[nivelAtual];
+    var opcoesContainer = document.getElementById("opcoesContainer");
+    Array.prototype.forEach.call(opcoesContainer.children, function(botao, indice){
+      botao.disabled = true;
+      if(indice === dados.certa){ botao.classList.add("certa"); }
+    });
+
+    var retorno = document.getElementById("retornoContainer");
+    if(indiceEscolhido === dados.certa){
+      retorno.innerHTML = '<p class="retorno certo">' + dados.certo + '</p>';
+      concluidas[chaveProgresso(estacaoAtual.id, questaoAtual)] = true;
+      renderTrilha();
+    } else {
+      botaoClicado.classList.add("errada");
+      retorno.innerHTML = '<p class="retorno errado">' + dados.errado + '</p>';
+    }
+  }
+
+  document.getElementById("btnFechar").addEventListener("click", function(){
+    sobreposicao.classList.remove("aberta");
+    window.speechSynthesis.cancel();
+  });
+
+  sobreposicao.addEventListener("click", function(evento){
+    if(evento.target === sobreposicao){
+      sobreposicao.classList.remove("aberta");
+      window.speechSynthesis.cancel();
+    }
+  });
+
+  document.addEventListener("keydown", function(evento){
+    if(evento.key === "Escape" && sobreposicao.classList.contains("aberta")){
+      sobreposicao.classList.remove("aberta");
+      window.speechSynthesis.cancel();
+    }
+  });
+
+  document.getElementById("btnOuvir").addEventListener("click", function(){
+    if(!("speechSynthesis" in window)){
+      document.getElementById("statusLeitura").textContent = "A leitura em voz alta não está disponível neste navegador.";
+      return;
+    }
+    window.speechSynthesis.cancel();
+    var texto = document.getElementById("perguntaTexto").textContent;
+    var fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = "pt-BR";
+    fala.rate = 0.95;
+    window.speechSynthesis.speak(fala);
+    document.getElementById("statusLeitura").textContent = "Lendo a pergunta em voz alta.";
+  });
+
+  var tamanhoAtual = 100;
+  document.getElementById("btnAumentar").addEventListener("click", function(){
+    tamanhoAtual = Math.min(tamanhoAtual + 10, 150);
+    document.documentElement.style.fontSize = tamanhoAtual + "%";
+  });
+  document.getElementById("btnDiminuir").addEventListener("click", function(){
+    tamanhoAtual = Math.max(tamanhoAtual - 10, 85);
+    document.documentElement.style.fontSize = tamanhoAtual + "%";
+  });
+
+  var btnContraste = document.getElementById("btnContraste");
+  btnContraste.addEventListener("click", function(){
+    var ativo = document.body.classList.toggle("contraste-alto");
+    btnContraste.setAttribute("aria-pressed", ativo ? "true" : "false");
+  });
+
+  document.getElementById("btnReiniciar").addEventListener("click", function(){
+    concluidas = {};
+    renderTrilha();
+  });
+
+  renderTrilha();
+})();
+</script>
+</body>
+</html>
